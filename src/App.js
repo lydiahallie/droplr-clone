@@ -1,55 +1,44 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { storage, database } from './firebase';
+import { database } from './firebase';
+import { addImage, getImages } from './actions/addImage';
 import FileInput from 'react-file-input';
-import shortid from 'short-id';
+import { connect } from 'react-redux';
 
 class App extends Component {
   constructor() {
     super();
     this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.updateImages = this.updateImages.bind(this);
-    this.storageRef = storage.ref('/photos')
     this.picturesRef = database.ref('/pictures')
-    this.state = {
-      pictures: []
-    }
-  }
-
-  updateImages() {
-    this.picturesRef.on('value', snapshot => {
-      this.setState({ pictures: Object.values(snapshot.val())})
-    })
   }
 
   componentDidMount() {
-    this.updateImages()
+    database.ref('/pictures').on('value', snapshot => this.props.getImages(snapshot.val()));
   }
-
 
   handleFileSelected(event) {
     const file = event.target.files[0]
-    const uploadTask = this.storageRef.child(file.name).put(file, { contentType: file.type });
-    const image = this.storageRef.child(file.name)
-    image.getDownloadURL().then(url => {
-      this.picturesRef.child(`/photoURL-${shortid.generate()}`).set(url)
-      this.updateImages()
-    })
+    this.props.addImage(file)
   }
 
   render() {
-    const { files } = this.state
+    console.log('props', Object.values(this.props.pictures))
     return (
       <div>
         <FileInput 
           accepts=".jpg, .png, .gif"
           onChange={ this.handleFileSelected }
         />
-        { this.state.pictures.map(x => <img src={x} /> )}
+        {Object.values(this.props.pictures).map(x => <img src={x} />)}
       </div>
     );
   }
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    pictures: state
+  }
+}
+
+export default connect(mapStateToProps, { addImage, getImages })(App);
