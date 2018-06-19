@@ -1,0 +1,19 @@
+{
+  "name": "image-drop-2",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "create-react-class": "^15.6.3",
+    "firebase": "^5.0.4",
+    "react": "15.4.2",
+    "react-dom": "15.4.2",
+    "react-file-input": "^0.2.5",
+    "react-scripts": "1.1.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
