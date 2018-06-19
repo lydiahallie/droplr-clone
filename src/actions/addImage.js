@@ -2,7 +2,6 @@ import { database, storage } from '../firebase';
 import shortid from 'short-id';
 
 export const addImage = (file) => {
-  let date; let name;
   const imageRef = storage.ref('/photos').child(file.name).put(file, { contentType: file.type });
   imageRef
     .then(snapshot => { 
@@ -12,12 +11,12 @@ export const addImage = (file) => {
         database.ref('/pictures').child(`/photoURL-${shortid.generate()}`).set({url, timeCreated, name})
       })
     })
-    let val;
-    database.ref('/pictures').on('value', snapshot => val = snapshot.val());
-    return {
-      type: 'ADD_IMAGE',
-      payload: val,
-    }
+  let val;
+  database.ref('/pictures').on('value', snapshot => val = snapshot.val());
+  return {
+    type: 'ADD_IMAGE',
+    payload: val,
+  }
 }
 
 export const getImages = val => {

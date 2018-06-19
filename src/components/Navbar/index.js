@@ -3,7 +3,7 @@ import './styles.css';
 
 export const Navbar = () => (
   <div className='navbar'>
-    <h1>Droplr</h1>
+    <h1>droplr</h1>
     <input id='navbar-input' type='text' />
   </div>
 )

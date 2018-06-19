@@ -4,9 +4,87 @@
   right: 0px;
   display: flex;
   flex-wrap: wrap;
+  padding: 20px;
 }
 
 .image {
   height: 300px;
   width: 300px;
+}
+
+.image-card {
+  height: 200px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Avenir Next', sans-serif;
+  margin: 10px;
+}
+
+.image-photo {
+  height: 150px;
+  width: auto;
+  background-size: cover !important;
+  background-repeat: no-repeat !important;
+}
+
+.image-name {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 5px;
+  color: #737171;
+}
+
+.image-date {
+  color: grey;
+  font-size: 10px;
+  margin-left: 5px;
+}
+
+.images-wrapper-header {
+  font-family: 'Avenir Next', sans-serif;
+  padding: 20px;
+}
+
+.images-wrapper-header h1 {
+  font-weight: 400;
+  color: black;
+  font-size: 30px;
+  font-family: 'Avenir Next', sans-serif;
+}
+
+.images-wrapper-header-nav {
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  justify-content: space-between;
+  padding: 10px;
+}
+
+.images-wrapper-header-nav svg {
+  fill: rgb(89, 176, 153);
+  height: 25px;
+  width: 25px;
+}
+
+.images-wrapper-header-btns {
+  display: flex;
+  width: 200px;
+  display: flex;
+  justify-content: space-around;
+  font-size: 13px;
+  color: rgba(0, 0, 0, 0.2);
+}
+
+.images-wrapper-header-btns span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 2px;
+  padding: 3px 10px;
+  font-weight: 500;
+}
+
+.images-wrapper-header-btns span.active {
+  background-color: rgb(89, 176, 153);
+  color: white;
 }

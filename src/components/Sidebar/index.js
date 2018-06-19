@@ -3,18 +3,14 @@ import './styles.css';
 import { addImage } from '../../actions/addImage';
 import FileInput from 'react-file-input';
 import { connect } from 'react-redux';
-
+import { DownloadIcon, FoldersIcon, HeartIcon, ImagesIcon, PulseIcon, AudioIcon, DashboardIcon } from '../../assets/icons';
 const buttons = [
-  'Overview',
-  'Activity',
-  'Dearest',
-  'Folders',
-  'Images',
-  'Audio',
-  'Video',
-  'Notes',
-  'Links',
-  'Files'
+  {text: 'Overview', icon: <DashboardIcon /> },
+  {text: 'Activity', icon: <PulseIcon /> },
+  {text: 'Folders', icon: <FoldersIcon /> },
+  {text: 'Images', icon: <ImagesIcon /> },
+  {text: 'Audio', icon: <AudioIcon /> },
+  {text: 'Likes', icon: <HeartIcon /> },
 ]
 
 export const SidebarWrapper = ({addImage}) => {
@@ -26,6 +22,7 @@ export const SidebarWrapper = ({addImage}) => {
     <div className='sidebar'>
       <div className='drop-images'>
         <div className='drop-images-style'>
+          <DownloadIcon />
           <FileInput 
             className='file-input'
             placeholder='Select Images'
@@ -35,7 +32,8 @@ export const SidebarWrapper = ({addImage}) => {
       </div>
       { buttons.map(x => (
         <div className='sidebar-button'>
-          {x}
+          {x.icon}
+          <span>{x.text}</span>
         </div>
       ))}
     </div>

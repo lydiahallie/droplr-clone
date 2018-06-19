@@ -1,7 +1,7 @@
 .navbar {
-  height: 50px;
+  height: 60px;
   width: 100vw;
-  background-color: #283436;
+  background-color: rgb(28, 34, 36);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -10,6 +10,10 @@
 
 h1 {
   margin: 0px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 24px;
+  color: white;
+  margin-left: 40px;
 }
 
 #navbar-input { 
@@ -22,3 +26,4 @@ h1 {
   font-family: 'Avenir Next', sans-serif;
   border-radius: 20px;
 }
+
