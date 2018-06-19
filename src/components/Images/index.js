@@ -7,13 +7,15 @@ import shortid from 'short-id';
 import _ from 'lodash';
 import { removeImages } from '../../actions/addImage';
 
-const ImagesWrapperHeader = ({selected}) => (
+const ImagesWrapperHeader = ({selected, removeImages}) => (
   <div className='images-wrapper-header'>
     <h1>Overview</h1>
     <div className='images-wrapper-header-nav'>
       <div className='images-wrapper-header-icons'>
         <AddIcon />
-        <TrashIcon />
+        <div onClick={ () => removeImages() }>
+          <TrashIcon />
+        </div>
         <span style={{fontWeight: '600'}}>{selected.length} selected</span>
       </div>
       <div className='images-wrapper-header-btns'>
@@ -27,7 +29,6 @@ const ImagesWrapperHeader = ({selected}) => (
 
 const ImageCard = ({img, clickHandler, index, selected, removeImages}) => (
   <div className={`image-card selected-${selected.includes(img)}`} onClick={() => clickHandler(img)} >
-    <button onClick={ () => removeImages(img)}>Remove</button>
     <div className='image-photo' style={{background: `url(${img.url})`}} />
     <span className='image-name'>{img.name}</span>
     <span className='image-date'>{moment(img.timeCreated).fromNow()}</span>
@@ -59,8 +60,8 @@ class ImagesWrapper extends Component {
   }
 
   removeImages(img) {
-    console.log('img!', img)
-    this.props.removeImages(img)
+    console.log('getting called')
+    this.props.removeImages(this.state.selected)
   }
 
   render() {
@@ -68,7 +69,7 @@ class ImagesWrapper extends Component {
     const {selected} = this.state;
     return (
       <div>
-        <ImagesWrapperHeader selected={ selected } />
+        <ImagesWrapperHeader selected={ selected } removeImages={ this.removeImages }/>
         <div className='images-wrapper'>
         { pictureArray.length && pictureArray.map((x, i) => <ImageCard removeImages={this.removeImages} selected={ selected } key={ shortid.generate() } index={i} clickHandler={ this.clickHandler } img={x} />) }
         </div>

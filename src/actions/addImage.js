@@ -27,10 +27,15 @@ export const getImages = val => {
 }
 
 export const removeImages = val => {
-  database.ref('/pictures').orderByChild('shortid').equalTo(val.shortid).on('value', snapshot => {
-    const child = Object.keys(snapshot.val())
-    if (child) database.ref('/pictures').child('/'+child).remove()
+  val.map(img => {
+    if (img.shortid) database.ref('/pictures').orderByChild('shortid').equalTo(img.shortid).on('value', snapshot => {
+      if (snapshot.val()) { 
+        const child = Object.keys(snapshot.val()) 
+        database.ref('/pictures').child('/'+child).remove()
+      }
+    })
   })
+ 
   
   return {
     type: null,
