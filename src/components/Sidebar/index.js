@@ -6,13 +6,35 @@ import { connect } from 'react-redux';
 import { DownloadIcon, FoldersIcon, HeartIcon, ImagesIcon, PulseIcon, AudioIcon, DashboardIcon } from '../../assets/icons';
 
 const buttons = [
-  {text: 'Overview', icon: <DashboardIcon /> },
-  {text: 'Activity', icon: <PulseIcon /> },
-  {text: 'Folders', icon: <FoldersIcon /> },
-  {text: 'Images', icon: <ImagesIcon /> },
-  {text: 'Audio', icon: <AudioIcon /> },
-  {text: 'Likes', icon: <HeartIcon /> },
+  {main: [
+    {text: 'Overview', icon: <DashboardIcon /> },
+    {text: 'Activity', icon: <PulseIcon /> },
+    {text: 'Likes', icon: <HeartIcon /> },
+    {text: 'Folders', icon: <FoldersIcon /> },
+  ]},
+  {filter: [
+    {text: 'Images', icon: <ImagesIcon /> },
+    {text: 'Audio', icon: <AudioIcon /> },
+  ]}
 ];
+
+const spans = ['main', 'filter'];
+
+const ButtonBlocks = () => (
+  <div>
+    { spans.map((span, i) => (
+      <div className='filter-block'>
+        <span id="filter-span">{span}</span>
+        { buttons[i][span].map(x => (
+          <div className='sidebar-button'>
+            {x.icon}
+            <span>{x.text}</span>
+          </div>
+        ))}
+      </div>
+    ))}
+  </div>
+);
 
 export const SidebarWrapper = ({addImage}) => {
   const handleImage = event => {
@@ -25,18 +47,14 @@ export const SidebarWrapper = ({addImage}) => {
         <div className='drop-images-style'>
           <DownloadIcon />
           <FileInput 
+            accepts=".png, .jpg, .jpeg"
             className='file-input'
             placeholder='Select Images'
             onChange={ e => handleImage(e) }
           />
         </div>
       </div>
-      { buttons.map(x => (
-        <div className='sidebar-button'>
-          {x.icon}
-          <span>{x.text}</span>
-        </div>
-      ))}
+      <ButtonBlocks />
     </div>
   )
 }

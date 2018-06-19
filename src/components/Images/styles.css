@@ -1,6 +1,6 @@
 .images-wrapper {
   width: calc(100vw - 300px);
-  max-height: calc(100vh - 180px);
+  max-height: calc(100vh - 140px);
   overflow-y: scroll;
   position: relative;
   right: 0px;
@@ -100,7 +100,7 @@
   color: white;
 }
 
-.image-wrapper-header-icons {
+.images-wrapper-header-icons {
   display: flex;
   justify-content: space-between;
   align-items: center;
