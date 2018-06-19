@@ -1,0 +1,24 @@
+.navbar {
+  height: 50px;
+  width: 100vw;
+  background-color: #283436;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Avenir Next', sans-serif;
+}
+
+h1 {
+  margin: 0px;
+}
+
+#navbar-input { 
+  padding: 5px;
+  background-color: white;
+  height: 20px;
+  margin: 0 20px;
+  border: none;
+  outline: none;
+  font-family: 'Avenir Next', sans-serif;
+  border-radius: 20px;
+}

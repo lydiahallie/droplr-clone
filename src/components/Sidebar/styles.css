@@ -1,0 +1,39 @@
+.sidebar {
+  width: 300px;
+  height: calc(100vh - 50px);
+  position: relative;
+  background-color: #364345;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-button {
+  height: 50px;
+  width: 100%;
+  color: white;
+  font-family: 'Avenir Next', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drop-images {
+  background-color: rgb(89, 176, 153);
+  height: 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.drop-images-style {
+  position: absolute;
+  width: 180px;
+  height: 60px;
+  border: 2px dashed white;
+  display: flex;
+  justify-content: center;
+}
+
+.file-input {
+  height: 100px;
+}

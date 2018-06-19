@@ -1,0 +1,12 @@
+.images-wrapper {
+  width: calc(100vw - 300px);
+  position: relative;
+  right: 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image {
+  height: 300px;
+  width: 300px;
+}

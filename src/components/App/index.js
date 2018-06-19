@@ -1,9 +1,11 @@
 import React, { Component } from 'react';
-import './App.css';
-import { database } from './firebase';
-import { addImage, getImages } from './actions/addImage';
-import FileInput from 'react-file-input';
+import { database } from '../../firebase';
+import { addImage, getImages } from '../../actions/addImage';
+
 import { connect } from 'react-redux';
+import { Navbar } from '../Navbar';
+import { Sidebar } from '../Sidebar';
+import { Images } from '../Images';
 
 class App extends Component {
   constructor() {
@@ -18,18 +20,23 @@ class App extends Component {
 
   handleFileSelected(event) {
     const file = event.target.files[0]
+    console.log('file in js', file)
     this.props.addImage(file)
   }
 
   render() {
-    console.log('props', Object.values(this.props.pictures))
     return (
       <div>
-        <FileInput 
+        <Navbar />
+        <div style={{display: 'flex'}}>
+          <Sidebar />
+          <Images />
+        </div>
+        {/* <FileInput 
           accepts=".jpg, .png, .gif"
           onChange={ this.handleFileSelected }
         />
-        {Object.values(this.props.pictures).map(x => <img src={x} />)}
+        {Object.values(this.props.pictures).map(x => <img src={x} />)} */}
       </div>
     );
   }
