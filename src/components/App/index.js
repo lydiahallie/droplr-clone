@@ -10,33 +10,28 @@ import { Images } from '../Images';
 class App extends Component {
   constructor() {
     super();
+
     this.handleFileSelected = this.handleFileSelected.bind(this);
     this.picturesRef = database.ref('/pictures')
   }
 
   componentDidMount() {
-    database.ref('/pictures').on('value', snapshot => this.props.getImages(snapshot.val()));
+    this.picturesRef.on('value', snapshot => this.props.getImages(snapshot.val()));
   }
 
   handleFileSelected(event) {
     const file = event.target.files[0]
-    console.log('file in js', file)
     this.props.addImage(file)
   }
 
   render() {
     return (
-      <div>
+      <div className='app'>
         <Navbar />
         <div style={{display: 'flex'}}>
           <Sidebar />
           <Images />
         </div>
-        {/* <FileInput 
-          accepts=".jpg, .png, .gif"
-          onChange={ this.handleFileSelected }
-        />
-        {Object.values(this.props.pictures).map(x => <img src={x} />)} */}
       </div>
     );
   }

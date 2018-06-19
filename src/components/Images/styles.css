@@ -1,5 +1,7 @@
 .images-wrapper {
   width: calc(100vw - 300px);
+  max-height: calc(100vh - 180px);
+  overflow-y: scroll;
   position: relative;
   right: 0px;
   display: flex;
@@ -14,11 +16,20 @@
 
 .image-card {
   height: 200px;
-  width: 200px;
+  width: 195px;
   display: flex;
   flex-direction: column;
   font-family: 'Avenir Next', sans-serif;
-  margin: 10px;
+  margin: 5px;
+  padding: 10px;
+  background-color: white;
+  transform: .3s ease-in-out;
+  border-radius: 5px;
+}
+
+.image-card.selected-true {
+  background-color: rgba(0, 0, 0, 0.1);
+  transform: .3s ease-in-out;
 }
 
 .image-photo {
@@ -87,4 +98,11 @@
 .images-wrapper-header-btns span.active {
   background-color: rgb(89, 176, 153);
   color: white;
+}
+
+.image-wrapper-header-icons {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 200px;
 }

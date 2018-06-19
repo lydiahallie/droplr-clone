@@ -8,7 +8,7 @@ export const addImage = (file) => {
       const { timeCreated, name } = snapshot.metadata;
       const image = storage.ref('/photos').child(file.name);
       image.getDownloadURL().then(url => {
-        database.ref('/pictures').child(`/photoURL-${shortid.generate()}`).set({url, timeCreated, name})
+        database.ref('/pictures').child(`/photoURL-${shortid.generate()}`).set({url, timeCreated, name, shortid: shortid.generate()})
       })
     })
   let val;
