@@ -3,25 +3,38 @@ import logo from './logo.svg';
 import './App.css';
 import { storage, database } from './firebase';
 import FileInput from 'react-file-input';
+import shortid from 'short-id';
 
 class App extends Component {
   constructor() {
     super();
     this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.storageRef = storage.ref('/user-images')
+    this.updateImages = this.updateImages.bind(this);
+    this.storageRef = storage.ref('/photos')
     this.picturesRef = database.ref('/pictures')
     this.state = {
-      img: ''
+      pictures: []
     }
   }
 
+  updateImages() {
+    this.picturesRef.on('value', snapshot => {
+      this.setState({ pictures: Object.values(snapshot.val())})
+    })
+  }
+
+  componentDidMount() {
+    this.updateImages()
+  }
+
+
   handleFileSelected(event) {
     const file = event.target.files[0]
-    const uploadTask = this.storageRef.child('/test').put(file, { contentType: file.type });
-    const image = this.storageRef.child('/test').child(file.name)
+    const uploadTask = this.storageRef.child(file.name).put(file, { contentType: file.type });
+    const image = this.storageRef.child(file.name)
     image.getDownloadURL().then(url => {
-      this.picturesRef.child('/photoURL').set(url)
-      this.setState({ img: url})
+      this.picturesRef.child(`/photoURL-${shortid.generate()}`).set(url)
+      this.updateImages()
     })
   }
 
@@ -33,7 +46,7 @@ class App extends Component {
           accepts=".jpg, .png, .gif"
           onChange={ this.handleFileSelected }
         />
-        <img src={this.state.img} />
+        { this.state.pictures.map(x => <img src={x} /> )}
       </div>
     );
   }

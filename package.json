@@ -8,7 +8,8 @@
     "react": "15.4.2",
     "react-dom": "15.4.2",
     "react-file-input": "^0.2.5",
-    "react-scripts": "1.1.4"
+    "react-scripts": "1.1.4",
+    "short-id": "^0.1.0-1"
   },
   "scripts": {
     "start": "react-scripts start",
