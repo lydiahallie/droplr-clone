@@ -3,66 +3,63 @@ import { connect } from 'react-redux';
 import { database } from '../../firebase';
 import { addFolder, getFolders } from '../../actions/folders';
 import App from '../App';
+import { CloseIcon } from '../../assets/icons'; 
 import './styles.css';
 
-class FolderCard extends Component {
-  constructor() {
-    super();
-    this.state = {
-      editing: false,
-      name: '',
-    }
-  }
+const ExpandedFolder = ({toggleExpansion, images}) => (
+  <div className='expanded-folder-wrapper'>
+    <div id="close-icon" onClick={ toggleExpansion }><CloseIcon /></div>
+    <div className='expanded-folder-images'>
+      {images.map(x => <img src={x.url} />)}
+    </div>
+  </div>
+)
 
-  clickHandler = () => this.setState(({editing}) => ({editing: !editing}));
-
-  handleChange = e => {
-    const {name, value} = e.target;
-    this.setState({
-      [name]: value
-    });
-  }
-
-  render() {
-    return (
-      <div className='folder-card' onClick={ this.clickHandler}>
-        <button onClick={ () => this.props.addImages() }>Add Images</button>
-      </div>
-    );
-  }
-}
+const FolderCard = ({seeFolder, folder}) => (
+  <div className='folder-card' onClick={ () => seeFolder(folder.images)}>
+    <div className='folder-card-images'>
+      {folder.images ? 
+      folder.images.map(x => 
+      <img className='folder-card-img' src={x.url} />) : 'Empty Folder' }
+    </div>
+  </div>
+);
 
 class Folders extends Component {
   constructor() {
     super();
     this.state = {
-      editing: false,
-      name: '',
+      expanded: false,
       images: [],
     }
 
-    this.handleEditing = this.handleEditing.bind(this);
+    this.seeFolder = this.seeFolder.bind(this);
   }
 
-  addImages = () => this.setState(({editing}) => ({editing: !editing}))
-
-  handleEditing(folder) {
-    this.setState({ editing: folder })
-  }
+  toggleExpansion = () => 
+    this.setState(({expanded}) => ({expanded: !expanded}))
 
   componentDidMount() {
     database.ref('/folders').on('value', snapshot => this.props.getFolders(snapshot.val()))
+  }
+
+  seeFolder(images) {
+    this.setState({
+      expanded: true,
+      images,
+    })
   }
 
   render() {
     const folders = Object.values(this.props.folders);
     return (
       <div className='folders-wrapper'>
+        {this.state.expanded && <ExpandedFolder toggleExpansion={ this.toggleExpansion } images={this.state.images} />}
         <div className='folders-header'>
           <span id="add-folder" onClick={ () => this.props.addFolder() }>Add Folder</span>
           <div className='folders'>
-          { folders.length && folders.map(x => 
-            <FolderCard addImages={ this.addImages } />
+          { folders.length && folders.map(folder => 
+            <FolderCard seeFolder={ this.seeFolder } folder={folder} addImages={ this.addImages } />
           )}
           </div>
         </div>
@@ -70,10 +67,6 @@ class Folders extends Component {
     )  
   }
 }
-
-// this.props.folders.length ? 
-// <div>FOlder!!!</div> :
-// <p>You don't have folders yet</p>
 
 const mapStateToProps = state => {
   return {

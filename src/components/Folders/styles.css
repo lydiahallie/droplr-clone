@@ -30,6 +30,7 @@
 .folder-card {
   height: 150px;
   width: 195px;
+  overflow: hidden;
   margin: 20px;
   background-color: rgba(0, 0, 0, 0.1);
 }
@@ -67,4 +68,55 @@
 
 .folder-btn:hover {
   background-color: rgba(0, 0, 0, 0.1);
+}
+
+.folder-card-images {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-left: 6px;
+}
+
+.folder-card-img {
+  width: 45%;
+  margin: 2px;
+  height: 70px;
+}
+
+.expanded-folder-wrapper {
+  position: absolute;
+  z-index: 1;
+  height: calc(100vh - 60px);
+  width: calc(100vw - 200px);
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.7);
+}
+
+.expanded-folder-wrapper img {
+  height: 200px;
+  margin: 30px;
+}
+
+#close-icon {
+  fill: white;
+  height: 30px;
+  width: 30px;
+  position: absolute;
+  top: 50px;
+  left: 50px;
+}
+
+.expanded-folder-images {
+  background-color: #c5c5c5;
+  height: 570px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  position: relative;
+  overflow: scroll;
+  width: 90%;
+  top: 100px;
 }

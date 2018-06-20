@@ -32,8 +32,7 @@ class ImagesWrapperHeader extends Component {
     }
   }
 
-  addItemsToFolder = (folder) => {
-    console.log('folder!!!', folder)
+  addItemsToFolder = folder => {
     database.ref('/folders').child(folder).set({images: this.props.selected})
   }
 
