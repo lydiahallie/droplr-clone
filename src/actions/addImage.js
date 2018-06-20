@@ -1,7 +1,7 @@
 import { database, storage } from '../firebase';
 import shortid from 'short-id';
 
-export const addImage = (file) => {
+export const addImage = (file) => dispatch => {
   const imageRef = storage.ref('/photos').child(file.name).put(file, { contentType: file.type });
   imageRef
     .then(snapshot => { 
@@ -13,10 +13,10 @@ export const addImage = (file) => {
     })
   let val;
   database.ref('/pictures').on('value', snapshot => val = snapshot.val());
-  return {
+  dispatch({
     type: 'ADD_IMAGE',
     payload: val,
-  }
+  })
 }
 
 export const getImages = val => {
@@ -26,19 +26,3 @@ export const getImages = val => {
   }
 }
 
-export const removeImages = val => {
-  val.map(img => {
-    if (img.shortid) database.ref('/pictures').orderByChild('shortid').equalTo(img.shortid).on('value', snapshot => {
-      if (snapshot.val()) { 
-        const child = Object.keys(snapshot.val()) 
-        database.ref('/pictures').child('/'+child).remove()
-      }
-    })
-  })
- 
-  
-  return {
-    type: null,
-    payload: null,
-  }
-}

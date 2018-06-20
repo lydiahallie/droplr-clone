@@ -1,15 +1,8 @@
-import { database, storage } from '../firebase';
-import shortid from 'short-id';
+import { combineReducers } from 'redux';
+import { imageReducer } from './images';
+import { folderReducer } from './folders';
 
-export const imageReducer = (state = {}, action) => {
-  switch (action.type) {
-    case 'ADD_IMAGE':
-      state = action.payload
-
-    case 'GET_IMAGES':
-      state = action.payload
-
-    default: 
-      return state;
-  }
-}
+export default combineReducers({
+  images: imageReducer,
+  folders: folderReducer,
+})

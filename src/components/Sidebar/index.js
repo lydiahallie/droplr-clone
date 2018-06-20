@@ -4,17 +4,18 @@ import { addImage } from '../../actions/addImage';
 import FileInput from 'react-file-input';
 import { connect } from 'react-redux';
 import { DownloadIcon, FoldersIcon, HeartIcon, ImagesIcon, PulseIcon, AudioIcon, DashboardIcon } from '../../assets/icons';
+import { NavLink } from 'react-router-dom';
 
 const buttons = [
   {main: [
-    {text: 'Overview', icon: <DashboardIcon /> },
-    {text: 'Activity', icon: <PulseIcon /> },
-    {text: 'Likes', icon: <HeartIcon /> },
-    {text: 'Folders', icon: <FoldersIcon /> },
+    {text: 'Overview', icon: <DashboardIcon />, to: '' },
+    {text: 'Activity', icon: <PulseIcon />, to: 'activity' },
+    {text: 'Likes', icon: <HeartIcon />, to: 'likes'},
+    {text: 'Folders', icon: <FoldersIcon />,  to: 'folders'},
   ]},
   {filter: [
-    {text: 'Images', icon: <ImagesIcon /> },
-    {text: 'Audio', icon: <AudioIcon /> },
+    {text: 'Images', icon: <ImagesIcon />, to: 'images'},
+    {text: 'Audio', icon: <AudioIcon />, to: 'audio' },
   ]}
 ];
 
@@ -26,10 +27,13 @@ const ButtonBlocks = () => (
       <div className='filter-block'>
         <span id="filter-span">{span}</span>
         { buttons[i][span].map(x => (
-          <div className='sidebar-button'>
+          <NavLink 
+            to={`/${x.to}`}
+            activeClassName='active'
+            className='sidebar-button'>
             {x.icon}
             <span>{x.text}</span>
-          </div>
+          </NavLink>
         ))}
       </div>
     ))}
@@ -48,6 +52,7 @@ export const SidebarWrapper = ({addImage}) => {
           <DownloadIcon />
           <FileInput 
             accepts=".png, .jpg, .jpeg"
+            multiple
             className='file-input'
             placeholder='Select Images'
             onChange={ e => handleImage(e) }

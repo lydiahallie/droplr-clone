@@ -15,32 +15,37 @@ class App extends Component {
     this.picturesRef = database.ref('/pictures')
   }
 
-  componentDidMount() {
-    this.picturesRef.on('value', snapshot => this.props.getImages(snapshot.val()));
-  }
-
   handleFileSelected(event) {
-    const file = event.target.files[0]
-    this.props.addImage(file)
+    const file = event.target.files[0];
+    this.props.addImage(file);
   }
 
   render() {
+    console.log('see if it works', this.props.pictures)
     return (
       <div className='app'>
         <Navbar />
         <div style={{display: 'flex'}}>
           <Sidebar />
-          <Images />
+          { this.props.children }
         </div>
       </div>
     );
   }
 }
 
+
 const mapStateToProps = state => {
   return {
-    pictures: state
+    pictures: state.images
   }
 }
 
-export default connect(mapStateToProps, { addImage, getImages })(App);
+const mapDispatchToProps = dispatch => {
+  return {
+    addImage: () => dispatch(addImage),
+    getImages: () => dispatch(getImages),
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
