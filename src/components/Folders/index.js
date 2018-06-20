@@ -55,13 +55,13 @@ class Folders extends Component {
     return (
       <div className='folders-wrapper'>
         {this.state.expanded && <ExpandedFolder toggleExpansion={ this.toggleExpansion } images={this.state.images} />}
-        <div className='folders-header'>
+        <div className='images-wrapper-header'>
           <span id="add-folder" onClick={ () => this.props.addFolder() }>Add Folder</span>
-          <div className='folders'>
-          { folders.length && folders.map(folder => 
-            <FolderCard seeFolder={ this.seeFolder } folder={folder} addImages={ this.addImages } />
-          )}
-          </div>
+        </div>
+        <div className='folders'>
+        { folders.length && folders.map(folder => 
+          <FolderCard seeFolder={ this.seeFolder } folder={folder} addImages={ this.addImages } />
+        )}
         </div>
       </div>
     )  

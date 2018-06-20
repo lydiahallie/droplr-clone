@@ -106,3 +106,26 @@
   align-items: center;
   width: 200px;
 }
+
+.name-span {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  z-index: 2;
+}
+
+.name-span svg {
+  height: 15px;
+  fill: #737171;
+}
+
+#img-name-input {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 5px;
+  color: #737171;
+  width: 170px;
+  height: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  outline: none;
+}

@@ -11,13 +11,17 @@
   width: 100px;
 }
 
+.folders-wrapper {
+  width: calc(100vw - 250px)
+}
+
 .folders-header {
   padding: 30px;
-  height: 200px;
+  height: 100px;
 }
 
 .folders {
-  width: calc(100vw - 300px);
+  width: calc(100vw - 250px);
   max-height: calc(100vh - 140px);
   overflow-y: scroll;
   position: relative;
@@ -88,7 +92,7 @@
   position: absolute;
   z-index: 1;
   height: calc(100vh - 60px);
-  width: calc(100vw - 200px);
+  width: calc(100vw - 250px);
   display: flex;
   flex-wrap: wrap;
   justify-content: center;

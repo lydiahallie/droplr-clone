@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './styles.css';
 import moment from 'moment';
-import { AddIcon, TrashIcon, FoldersIcon } from '../../assets/icons';
+import { AddIcon, TrashIcon, FoldersIcon, ChangeIcon } from '../../assets/icons';
 import shortid from 'short-id';
 import _ from 'lodash';
 import { getImages, addImage } from '../../actions/addImage';
@@ -67,13 +67,66 @@ class ImagesWrapperHeader extends Component {
   }
 } 
   
-const ImageCard = ({img, clickHandler, index, selected, removeImages}) => (
-  <div className={`image-card selected-${selected.includes(img)}`} onClick={() => clickHandler(img)} >
-    <div className='image-photo' style={{background: `url(${img.url})`}} />
-    <span className='image-name'>{img.name}</span>
-    <span className='image-date'>{moment(img.timeCreated).fromNow()}</span>
-  </div>
-);
+class ImageCard extends Component {
+  constructor() {
+    super();
+    this.state = {
+      name: '',
+      hovering: false,
+      editing: false,
+    }
+
+    this.handleChange = this.handleChange.bind(this);
+    this.toggleHover = this.toggleHover.bind(this);
+    this.toggleEditing = this.toggleEditing.bind(this);
+    this.changeName = this.changeName.bind(this);
+  }
+
+  handleChange(e) {
+    this.setState({ name: e.target.value })
+  }
+
+  toggleHover() {
+    this.setState(({hovering}) => ({hovering: !hovering}));
+  }
+
+  toggleEditing(e) {
+    e.stopPropagation()
+    this.setState({editing: true});
+  }
+
+  changeName(e) {
+    e.preventDefault();
+    database.ref('/pictures').orderByChild('shortid').equalTo(this.props.img.shortid).on('value', snapshot => {
+      if (snapshot.val()) {
+        const child = Object.keys(snapshot.val()) 
+        database.ref('/pictures').child('/'+child).update({name: this.state.name});
+      }
+    })
+    this.setState({ editing: false });
+  }
+
+  render() {
+    const {img, clickHandler, index, selected, removeImages} = this.props;
+    const { editing, hovering } = this.state;
+    return (
+      <div className={`image-card selected-${selected.includes(img)}`} onClick={() => clickHandler(img)} >
+        <div className='image-photo' style={{background: `url(${img.url})`}} />
+        { editing ? 
+        <div>
+          <form onSubmit={ this.changeName }>
+            <input onClick={e => e.stopPropagation()} id="img-name-input" type='text' onChange={ this.handleChange } value={ this.state.name } />
+          </form>
+        </div> :
+        <div className='name-span' onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>
+          <span onClick={this.toggleEditing} className='image-name'>{img.name}</span> 
+          { hovering && <div><ChangeIcon /></div> }
+        </div> }
+        <span className='image-date'>{moment(img.timeCreated).fromNow()}</span>
+      </div>
+    );
+  }
+};
 
 class ImagesWrapper extends Component {
   constructor() {
@@ -104,7 +157,7 @@ class ImagesWrapper extends Component {
   removeImages() {
     this.state.selected.map(img => {
       if (img.shortid) database.ref('/pictures').orderByChild('shortid').equalTo(img.shortid).on('value', snapshot => {
-        if (snapshot.val()) { 
+        if (snapshot.val()) {   
           const child = Object.keys(snapshot.val()) 
           database.ref('/pictures').child('/'+child).remove()
         }
