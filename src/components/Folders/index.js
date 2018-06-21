@@ -104,14 +104,13 @@ class FolderCard extends Component {
           onMouseEnter={ () => this.handleHover(true) }>
           { hovering && 
             <div className='folder-card-over'>
-              <span className='folder-name'>{folder.name}</span>
               <div onClick={ () => seeFolder(folder.images) } className={`folder-card-over-btn active-${active}`}>See Folder</div>
-              <div onClick={ () => deleteFolder(i) } className='folder-card-over-btn delete'>Delete</div>
+              <div onClick={ () => deleteFolder(folder) } className='folder-card-over-btn delete'>Delete</div>
             </div>
           }
           <div className='folder-card-images'>
             { active ? folder.images.map(x => 
-            <img className='folder-card-img' src={x.url} />) : <div className='empty-folder' /> }
+            <img className='folder-card-img' src={x.url} />) : <div /> }
           </div>
         </div>
         { this.state.editing ? 
@@ -134,7 +133,6 @@ class Folders extends Component {
     super();
     this.state = {
       expanded: false,
-      images: [],
     }
 
     this.seeFolder = this.seeFolder.bind(this);

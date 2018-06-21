@@ -1,10 +1,7 @@
-import shortid from 'short-id';
-const initialState = [{id: shortid.generate(), name: 'Empty', images: []}]
-
-export const folderReducer = (state = initialState, action) => {
+export const folderReducer = (state = {}, action) => {
   switch (action.type) {
     case 'GET_FOLDERS':
-      state = action.payload || initialState
+      state = action.payload || false
     default: 
       return state;
   }

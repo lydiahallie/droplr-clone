@@ -61,6 +61,7 @@
   font-weight: 400;
   color: black;
   font-size: 30px;
+  margin: 10px;
   font-family: 'Avenir Next', sans-serif;
 }
 
@@ -93,9 +94,10 @@
   border-radius: 2px;
   padding: 3px 10px;
   font-weight: 500;
+  cursor: pointer;
 }
 
-.images-wrapper-header-btns span.active {
+.images-wrapper-header-btns span.active-true {
   background-color: rgb(89, 176, 153);
   color: white;
 }
@@ -128,4 +130,43 @@
   height: 12px;
   border: 1px solid rgba(0, 0, 0, 0.1);
   outline: none;
+}
+
+.image-card svg {
+  position: absolute;
+  z-index: 2;
+  height: 30px;
+  fill: white;
+}
+
+.loader {
+  -webkit-animation: spin 1s linear infinite;
+          animation: spin 1s linear infinite;
+  border: 3px solid #ddd;
+  border-top: 3px solid #42a5f5;
+  border-radius: 50%;
+  height: 75px;
+  width: 75px;
+}
+
+@-webkit-keyframes spin {
+  to {
+    border-top-color:rgb(89, 176, 153);
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  to {
+    border-top-color: rgb(89, 176, 153);
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }

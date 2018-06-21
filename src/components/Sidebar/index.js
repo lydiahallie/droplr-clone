@@ -9,8 +9,6 @@ import { NavLink } from 'react-router-dom';
 const buttons = [
   {main: [
     {text: 'Overview', icon: <DashboardIcon />, to: '' },
-    {text: 'Activity', icon: <PulseIcon />, to: 'activity' },
-    {text: 'Likes', icon: <HeartIcon />, to: 'likes'},
     {text: 'Folders', icon: <FoldersIcon />,  to: 'folders'},
   ]},
   {filter: [
@@ -41,7 +39,7 @@ const ButtonBlocks = () => (
 );
 
 export const SidebarWrapper = ({addImage}) => {
-  const handleImage = event => {
+  function handleImage(event) {
     const file = event.target.files[0];
     addImage(file)
   }
@@ -52,7 +50,6 @@ export const SidebarWrapper = ({addImage}) => {
           <DownloadIcon />
           <FileInput 
             accepts=".png, .jpg, .jpeg"
-            multiple
             className='file-input'
             placeholder='Select Images'
             onChange={ e => handleImage(e) }

@@ -2,13 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './styles.css';
 import moment from 'moment';
-import { AddIcon, TrashIcon, FoldersIcon, ChangeIcon } from '../../assets/icons';
+import { AddIcon, TrashIcon, FoldersIcon, ChangeIcon, HeartIcon } from '../../assets/icons';
 import shortid from 'short-id';
 import _ from 'lodash';
 import { getImages, addImage } from '../../actions/addImage';
 import { getFolders, addFileToFolder } from '../../actions/folders';
 import App from '../App';
 import { database } from '../../firebase';
+import styled, { keyframes } from 'styled-components';
 
 const FolderMenu = ({folders, addItemsToFolder}) => {
   let arr = [];
@@ -29,6 +30,7 @@ class ImagesWrapperHeader extends Component {
     super();
     this.state = {
       expanded: false,
+      active: 2,
     }
   }
 
@@ -38,8 +40,13 @@ class ImagesWrapperHeader extends Component {
 
   toggleMenu = () => this.setState(({expanded}) => ({expanded: !expanded}))
   
+  changeBtn = i => {
+    this.setState({ active: i })
+    if (!i) this.props.toggleSort();
+  }
+
   render() {
-    const {expanded} = this.state;
+    const {expanded, active} = this.state;
     const {selected, removeImages} = this.props;
     return (
       <div className='images-wrapper-header'>
@@ -56,9 +63,9 @@ class ImagesWrapperHeader extends Component {
             <span style={{fontWeight: '600'}}>{selected.length} selected</span>
           </div>
           <div className='images-wrapper-header-btns'>
-            <span>Name</span>
-            <span>Size</span>
-            <span className='active'>Uploaded</span>
+            {['Name', 'Size', 'Uploaded'].map((btn, i) => (
+               <span onClick={ () => this.changeBtn(i) } className={`active-${active === i}`}>{btn}</span>
+            ))}
           </div>
         </div>
       </div>
@@ -72,6 +79,7 @@ class ImageCard extends Component {
     this.state = {
       name: '',
       hovering: false,
+      hoveringImg: false,
       editing: false,
     }
 
@@ -112,7 +120,7 @@ class ImageCard extends Component {
     const {img, clickHandler, index, selected, removeImages} = this.props;
     const { editing, hovering } = this.state;
     return (
-      <div className={`image-card selected-${selected.includes(img)}`} onClick={() => clickHandler(img)} >
+      <div className={`image-card selected-${selected.includes(img)}`} onClick={() => clickHandler(img)}>
         <div className='image-photo' style={{background: `url(${img.url})`}} />
         { editing ? 
         <div>
@@ -136,6 +144,8 @@ class ImagesWrapper extends Component {
     this.state = {
       selected: [],
       loaded: false,
+      hovering: false,
+      sortByName: false,
     }
     this.clickHandler = this.clickHandler.bind(this);
     this.removeImages = this.removeImages.bind(this);
@@ -152,8 +162,21 @@ class ImagesWrapper extends Component {
   }
 
   componentDidMount() {
+    if (this.props.pictures) {
+      setTimeout(() => this.setState({ loaded: true }), 1500);
+    } 
     database.ref('/pictures').on('value', snapshot => this.props.getImages(snapshot.val()))
     database.ref('/folders').on('value', snapshot => this.props.getFolders(snapshot.val()))
+  }
+
+  toggleSort = () => {
+    console.log('gettin invoked')
+    this.setState(({sortByName}) => ({sortByName: !sortByName}));
+  }
+
+  compare(a,b) {
+    return (a.name < b.name) ? -1 :
+    (a.name > b.name) ? 1 : 0
   }
 
   removeImages() {
@@ -173,25 +196,31 @@ class ImagesWrapper extends Component {
   }
 
   render() {
-    const {selected, loaded} = this.state;
+    const {selected, loaded, sortByName} = this.state;
     const {pictures} = this.props;
-    const pictureArray = pictures && Object.values(pictures);
+    let pictureArray = pictures && Object.values(pictures);
+    if (sortByName) pictureArray = pictureArray.sort(this.compare);
+    console.log('pic array now', pictureArray)
     return this.props.pictures && (
       <div>
         <ImagesWrapperHeader 
           folders={ this.props.folders } 
           addFileToFolder={ this.props.addFileToFolder }
           selected={ selected } 
+          toggleSort={ this.toggleSort }
           removeImages={ this.removeImages }/>
         <div className='images-wrapper'>
-        { pictureArray.length && pictureArray.map((x, i) => 
+        { loaded ? pictureArray.map((x, i) =>
           <ImageCard 
             removeImages={this.removeImages} 
             selected={ selected } 
             key={ shortid.generate() } 
             index={i} 
             clickHandler={ this.clickHandler } 
-            img={x} />) }
+            img={x} />) :
+          <div className="container">
+            <div className="loader"></div>
+          </div> }
         </div>
       </div>
     )
