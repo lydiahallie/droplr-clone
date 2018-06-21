@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { database } from '../../firebase';
+import { database, auth } from '../../firebase';
 import { addImage, getImages } from '../../actions/addImage';
-
 import { connect } from 'react-redux';
 import { Navbar } from '../Navbar';
 import { Sidebar } from '../Sidebar';
@@ -10,9 +9,12 @@ import { Images } from '../Images';
 class App extends Component {
   constructor() {
     super();
+    this.state = {
+      currentUser: null,
+    }
 
     this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.picturesRef = database.ref('/pictures')
+    this.picturesRef = database.ref('/pictures');
   }
 
   handleFileSelected(event) {
@@ -20,11 +22,25 @@ class App extends Component {
     this.props.addImage(file);
   }
 
+  componentDidMount() {
+    auth.onAuthStateChanged(currentUser => {
+      if (currentUser) {
+        database.ref('/users').once('value', snapshot => {
+          if (!snapshot.hasChild(`${currentUser.uid}`)) {
+            database.ref('/users').child(`${currentUser.uid}`).set({id: currentUser.uid})
+          }
+        });
+        this.setState({ currentUser });
+      } else {
+        this.setState({ currentUser: null });
+      }
+    });
+  }
+
   render() {
-    console.log('see if it works', this.props.pictures)
     return (
       <div className='app'>
-        <Navbar />
+        <Navbar currentUser={ this.state.currentUser } />
         <div style={{display: 'flex'}}>
           <Sidebar />
           { this.props.children }

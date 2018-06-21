@@ -12,14 +12,14 @@ import { database } from '../../firebase';
 
 const FolderMenu = ({folders, addItemsToFolder}) => {
   let arr = [];
-  for (let item in folders) arr.push(item)
+  for (let item in folders) arr.push(folders[item])
   return (
     <div className='folder-menu'>
       {folders && arr.map((folder, i) => (
         <div className='folder-btn' onClick={ () => addItemsToFolder(folder) } >
-          {folder.name ? folder.name : 'Empty Folder'}
-        </div>
-      ))}
+          {folder.name}
+        </div> 
+      ))} 
     </div>
   );
 }
@@ -33,7 +33,7 @@ class ImagesWrapperHeader extends Component {
   }
 
   addItemsToFolder = folder => {
-    database.ref('/folders').child(folder).set({images: this.props.selected})
+    database.ref('/folders').child(`folder-${folder.id}`).update({images: this.props.selected})
   }
 
   toggleMenu = () => this.setState(({expanded}) => ({expanded: !expanded}))
@@ -46,7 +46,6 @@ class ImagesWrapperHeader extends Component {
         <h1>Overview</h1>
         <div className='images-wrapper-header-nav'>
           <div className='images-wrapper-header-icons'>
-            <AddIcon />
             <div onClick={ () => removeImages() }>
               <TrashIcon />
             </div>
@@ -63,7 +62,7 @@ class ImagesWrapperHeader extends Component {
           </div>
         </div>
       </div>
-    )
+    );
   }
 } 
   
@@ -86,8 +85,8 @@ class ImageCard extends Component {
     this.setState({ name: e.target.value })
   }
 
-  toggleHover() {
-    this.setState(({hovering}) => ({hovering: !hovering}));
+  toggleHover(bool) {
+    this.setState({hovering: bool});
   }
 
   toggleEditing(e) {
@@ -103,7 +102,10 @@ class ImageCard extends Component {
         database.ref('/pictures').child('/'+child).update({name: this.state.name});
       }
     })
-    this.setState({ editing: false });
+    this.setState({ 
+      editing: false,
+      hovering: false,
+    });
   }
 
   render() {
@@ -114,12 +116,12 @@ class ImageCard extends Component {
         <div className='image-photo' style={{background: `url(${img.url})`}} />
         { editing ? 
         <div>
-          <form onSubmit={ this.changeName }>
-            <input onClick={e => e.stopPropagation()} id="img-name-input" type='text' onChange={ this.handleChange } value={ this.state.name } />
+          <form onSubmit={ e => this.changeName(e) }>
+            <input onClick={ e => e.stopPropagation() } id="img-name-input" type='text' onChange={ e => this.handleChange(e) } value={ this.state.name } />
           </form>
         </div> :
-        <div className='name-span' onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>
-          <span onClick={this.toggleEditing} className='image-name'>{img.name}</span> 
+        <div className='name-span' onMouseEnter={() => this.toggleHover(true)} onMouseLeave={() => this.toggleHover(false)} >
+          <span onClick={ e => this.toggleEditing(e) } className='image-name'>{img.name}</span> 
           { hovering && <div><ChangeIcon /></div> }
         </div> }
         <span className='image-date'>{moment(img.timeCreated).fromNow()}</span>
@@ -162,6 +164,11 @@ class ImagesWrapper extends Component {
           database.ref('/pictures').child('/'+child).remove()
         }
       })
+    })
+    this.state.selected.map(x => {
+      const deleteIndex = this.state.selected.indexOf(x);
+      this.state.selected.splice(deleteIndex, 1);
+      this.setState({ selected: this.state.selected })
     })
   }
 

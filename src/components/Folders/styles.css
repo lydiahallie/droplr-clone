@@ -37,6 +37,7 @@
   overflow: hidden;
   margin: 20px;
   background-color: rgba(0, 0, 0, 0.1);
+  margin-bottom: 5px;
 }
 
 .editing-wrapper {
@@ -101,7 +102,8 @@
 
 .expanded-folder-wrapper img {
   height: 200px;
-  margin: 30px;
+  margin: 18px;
+  width: 300px;
 }
 
 #close-icon {
@@ -123,4 +125,92 @@
   overflow: scroll;
   width: 90%;
   top: 100px;
+}
+
+.empty-folder {
+  border: 1px solid #d2d2d2;
+  height: 120px;
+  width: 165px;
+  position: relative;
+  top: 15px;
+  margin: 0px;
+  left: 7px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-folder svg {
+  height: 30px;
+  fill:  #8c8c8c;
+}
+
+.folder-card-over {
+  position: absolute;
+  height: 150px;
+  width: 195px;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.folder-card-over-btn {
+  color: black;
+  border-radius: 5px;
+  margin: 10px;
+  background-color: white;
+  padding: 5px 10px;
+  font-family: 'Avenir Next', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+  background-color: white;
+}
+
+.folder-card-over-btn.active-false {
+  opacity: 0.2;
+
+}
+
+.folder-card-over-btn.delete {
+  background-color: rgb(89, 176, 153);
+  color: white;
+}
+
+.folder-name {
+  font-family: 'Avenir Next', sans-serif;
+  font-weight: 500;
+  font-size: 15px;
+  color: white;
+}
+
+.folder-name {
+  font-size: 12px;
+  font-weight: bold;
+  margin: 5px;
+  color: #737171;
+  margin-left: 20px;
+}
+
+#folder {
+  margin-left: 20px !important;
+}
+
+#folder-icon svg {
+  height: 15px;
+  fill: #737171;
+}
+
+.folder-input-wrapper form {
+  margin-left: 20px;
+}
+
+.folder-input-wrapper form > input {
+  margin: 0px !important;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 5px;
+  color: #737171;
 }

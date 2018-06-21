@@ -27,3 +27,23 @@ h1 {
   font-family: 'Avenir Next', sans-serif;
   border-radius: 20px;
 }
+
+.navbar-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 20px;
+}
+
+.navbar img {
+  height: 40px;
+  border-radius: 20px;
+}
+
+.navbar-content span {
+  color: white;
+  font-family: 'Avenir Next', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  cursor: pointer;
+}
