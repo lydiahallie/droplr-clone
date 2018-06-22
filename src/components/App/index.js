@@ -4,7 +4,6 @@ import { addImage, getImages } from '../../actions/addImage';
 import { connect } from 'react-redux';
 import { Navbar } from '../Navbar';
 import { Sidebar } from '../Sidebar';
-import { Images } from '../Images';
 
 class App extends Component {
   constructor(props) {

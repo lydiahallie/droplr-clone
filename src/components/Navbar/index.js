@@ -1,6 +1,6 @@
 import React from 'react';
 import './styles.css';
-import {auth, database, googleAuthProvider} from '../../firebase';
+import { auth, googleAuthProvider } from '../../firebase';
 
 export const Navbar = ({ currentUser, logOut }) => {
   return (
@@ -12,7 +12,7 @@ export const Navbar = ({ currentUser, logOut }) => {
           <span onClick={() => auth.signInWithPopup(googleAuthProvider)}>
             Log In
           </span> :
-          <img onClick={() => auth.signOut()} src={currentUser.photoURL} /> 
+          <img onClick={() => auth.signOut()} src={currentUser.photoURL} alt="Avatar" /> 
         }
       </div>
     </div>

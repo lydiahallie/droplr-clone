@@ -3,7 +3,7 @@ import './styles.css';
 import { addImage } from '../../actions/addImage';
 import FileInput from 'react-file-input';
 import { connect } from 'react-redux';
-import { DownloadIcon, FoldersIcon, HeartIcon, ImagesIcon, PulseIcon, AudioIcon, DashboardIcon } from '../../assets/icons';
+import { DownloadIcon } from '../../assets/icons';
 import { NavLink } from 'react-router-dom';
 import { buttons, spans } from './buttonInfo';
 

@@ -2,9 +2,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { database } from '../../firebase';
 import { addFolder, getFolders } from '../../actions/folders';
-import App from '../App';
 import shortid from 'short-id';
-import { CloseIcon, AddIcon, TrashIcon, AddIconNoCircle, ChangeIcon } from '../../assets/icons'; 
+import { CloseIcon, TrashIcon, AddIconNoCircle, ChangeIcon } from '../../assets/icons'; 
 import './styles.css';
 
 
@@ -30,7 +29,7 @@ const ExpandedFolder = ({ toggleExpansion, images }) => {
   <div className="expanded-folder-wrapper">
     <div id="close-icon" onClick={toggleExpansion}><CloseIcon /></div>
     <div className="expanded-folder-images">
-      {images.map(x => <img src={x.url} />)}
+      {images.map(x => <img src={x.url} alt={x.name} />)}
     </div>
   </div> : 
   null
@@ -96,7 +95,7 @@ class FolderCard extends Component {
 
   render() {
     const { hovering } = this.state;
-    const { seeFolder, folder, deleteFolder, i } = this.props;
+    const { seeFolder, folder, deleteFolder } = this.props;
     const active = folder.images !== undefined;
     return (
       <div>
@@ -112,7 +111,7 @@ class FolderCard extends Component {
           }
           <div className="folder-card-images">
             { active ? folder.images.map(x => 
-            <img className="folder-card-img" src={x.url} />) : <div /> 
+            <img className="folder-card-img" src={x.url} alt={x.name} />) : <div /> 
             }
           </div>
         </div>

@@ -2,14 +2,12 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import './styles.css';
 import moment from 'moment';
-import { AddIcon, TrashIcon, FoldersIcon, ChangeIcon, HeartIcon } from '../../assets/icons';
+import { TrashIcon, FoldersIcon, ChangeIcon } from '../../assets/icons';
 import shortid from 'short-id';
-import _ from 'lodash';
 import { getImages, addImage } from '../../actions/addImage';
 import { getFolders } from '../../actions/folders';
-import App from '../App';
 import { database } from '../../firebase';
-import styled, { keyframes } from 'styled-components';
+// import styled, { keyframes } from 'styled-components';
 
 const FolderMenu = ({ folders, addItemsToFolder }) => {
   let arr = [];
@@ -120,7 +118,7 @@ class ImageCard extends Component {
   }
 
   render() {
-    const { img, clickHandler, index, selected, removeImages } = this.props;
+    const { img, clickHandler, selected } = this.props;
     const { editing, hovering } = this.state;
     return (
       <div className={`image-card selected-${selected.includes(img)}`} onClick={() => clickHandler(img)}>
@@ -192,7 +190,7 @@ class ImagesWrapper extends Component {
       })
       const deleteIndex = this.state.selected.indexOf(img);
       this.state.selected.splice(deleteIndex, 1);
-      this.setState({ selected: this.state.selected });
+      return this.setState({ selected: this.state.selected });
     })
     // this.state.selected.map(img => {
     //   const deleteIndex = this.state.selected.indexOf(x);
