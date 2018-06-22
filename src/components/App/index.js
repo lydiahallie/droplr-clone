@@ -3,6 +3,7 @@ import { database, auth } from '../../firebase';
 import { Navbar } from '../Navbar';
 import { SidebarWrapper } from '../../containers/SidebarWrapper';
 import PropTypes from 'prop-types';
+import './styles.css';
 
 export default class App extends Component {
   componentDidMount() {
@@ -22,7 +23,7 @@ export default class App extends Component {
     return (
       <div className="app">
         <Navbar currentUser={this.props.user} />
-        <div style={{ display: 'flex' }}>
+        <div style={{display: 'flex'}}>
           <SidebarWrapper />
           {this.props.children}
         </div>

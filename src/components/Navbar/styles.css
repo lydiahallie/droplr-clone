@@ -46,4 +46,11 @@ h1 {
   font-weight: 500;
   font-size: 13px;
   cursor: pointer;
+  width: 60px;
+}
+
+@media only screen and (max-width: 480px) {
+  h1 {
+    margin-left: 20px;
+  }
 }

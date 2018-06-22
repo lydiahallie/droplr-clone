@@ -29,17 +29,23 @@ export default class ImagesWrapperHeader extends Component {
       expanded: false,
       active: 2,
     }
+
+    this.addItemsToFolder = this.addItemsToFolder.bind(this);
+    this.toggleMenu = this.toggleMenu.bind(this);
+    this.changeBtn = this.changeBtn.bind(this);
   }
 
-  addItemsToFolder = folder => {
+  addItemsToFolder(folder) {
     database.ref('/folders').child(`folder-${folder.id}`).update({images: this.props.selected})
   }
 
-  toggleMenu = () => this.setState(({expanded}) => ({expanded: !expanded}))
+  toggleMenu() {
+    this.setState(({expanded}) => ({expanded: !expanded}));
+  }
   
-  changeBtn = i => {
+  changeBtn(i) {
     this.setState({ active: i })
-    if (!i) this.props.toggleSort();
+    this.props.toggleSort();
   }
 
   render() {

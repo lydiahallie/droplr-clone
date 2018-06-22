@@ -24,6 +24,11 @@
   color: white;
 }
 
+input[name="undefined_filename"] {
+  border-color: rgba(0, 0, 0, 0);
+  opacity: 0;
+}
+
 .sidebar-button svg {
   height: 20px;
   width: 20px;
@@ -75,4 +80,62 @@
 
 .filter-block {
   margin-top: 40px;
+}
+
+@media only screen and (max-width: 590px) {
+  .sidebar {
+    width: 150px !important;
+    font-size: 12px;
+  }
+
+  .sidebar-button svg {
+    height: 15px;
+    width: 15px;
+    fill: rgba(255, 255, 255, 0.3);
+    margin-right: 10px;
+  }
+
+  .drop-images-style {
+    width: 80%;
+  }
+
+  .drop-images-style svg {
+    position: absolute;
+    left: 46px;
+  }
+}
+
+@media only screen and (max-width: 480px) {
+  .sidebar {
+    width: 70px !important;
+    font-size: 12px;
+  }
+
+  .sidebar-button {
+    padding: 0px;
+    display: flex;
+    justify-content: center
+  }
+
+  .sidebar-button span {
+    opacity: 0;
+    width: 0px;
+  }
+
+  .sidebar-button svg {
+    height: 20px;
+    width: 20px;
+    fill: rgba(255, 255, 255, 0.3);
+    margin: 0px;
+  }
+
+  #filter-span {
+    margin-left: 10px;
+    font-size: 10px;
+  }
+
+  .drop-images-style svg {
+    position: absolute;
+    left: 10px;
+  }
 }

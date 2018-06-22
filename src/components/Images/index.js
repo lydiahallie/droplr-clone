@@ -20,6 +20,7 @@ export class Images extends Component {
     }
     this.clickHandler = this.clickHandler.bind(this);
     this.removeImages = this.removeImages.bind(this);
+    this.toggleSort = this.toggleSort.bind(this);
   }
 
   componentDidMount() {
@@ -56,7 +57,7 @@ export class Images extends Component {
     })
   }
 
-  toggleSort = () => {
+  toggleSort() {
     this.setState(({ sortByName }) => ({ sortByName: !sortByName }));
   }
 
@@ -68,10 +69,9 @@ export class Images extends Component {
   render() {
     const { selected, loaded, sortByName } = this.state;
     const { pictures, folders } = this.props;
-    let pictureArray = pictures && Object.values(pictures);
-    if (sortByName) pictureArray = pictureArray.sort(this.compare);
+    const activeArray = sortByName ? Object.values(pictures).sort(this.compare) : Object.values(pictures);
     return (
-      <div>
+      <div className='images-content'>
         <ImagesWrapperHeader 
           folders={folders} 
           selected={selected} 
@@ -79,7 +79,7 @@ export class Images extends Component {
           removeImages={this.removeImages}
         />
         <div className="images-wrapper">
-        { pictureArray.length && loaded ? pictureArray.map((x, i) =>
+        { activeArray.length && loaded ? activeArray.map((x, i) =>
           <ImageCard 
             selected={selected} 
             key={shortid.generate()} 
