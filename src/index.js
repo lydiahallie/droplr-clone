@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import { Provider } from 'react-redux';
-import { createStore, applyMiddleware } from 'redux';
-import rootReducer from './reducers';
-import App from './components/App';
-import Folders from './components/Folders';
-import registerServiceWorker from './registerServiceWorker';
-import { composeWithDevTools } from 'redux-devtools-extension'
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
-import { Images } from './components/Images';
+import { composeWithDevTools } from 'redux-devtools-extension'
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import registerServiceWorker from './registerServiceWorker';
 import thunk from 'redux-thunk';
+
+import FoldersPage from './containers/FoldersPage';
+import ImagesPage from './containers/ImagesPage';
+import Page from './containers/Page';
+import rootReducer from './reducers';
+import './index.css';
 
 const store = createStore(
   rootReducer, 
@@ -20,10 +21,10 @@ ReactDOM.render(
 <Provider store={store}>
   <BrowserRouter>
     <Switch>
-      <App>
-        <Route exact path="/" component={Images} />
-        <Route path="/folders" component={Folders} />
-      </App>
+      <Page>
+        <Route exact path="/" component={ImagesPage} />
+        <Route path="/folders" component={FoldersPage} />
+      </Page>
     </Switch>
   </BrowserRouter>
 </Provider>, document.getElementById('root'));

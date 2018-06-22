@@ -1,6 +1,6 @@
-export const folderReducer = (state = {}, action) => {
+export const userReducer = (state = {}, action) => {
   switch (action.type) {
-    case 'GET_FOLDERS':
+    case 'ADD_CURRENT_USER':
       return state = action.payload || false
 
     default: 

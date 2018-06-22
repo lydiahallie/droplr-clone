@@ -1,150 +1,18 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import FolderCard from './FolderCard';
 import { database } from '../../firebase';
-import { addFolder, getFolders } from '../../actions/folders';
 import shortid from 'short-id';
-import { CloseIcon, TrashIcon, AddIconNoCircle, ChangeIcon } from '../../assets/icons'; 
+import { CloseIcon, TrashIcon, AddIconNoCircle } from '../../assets/icons'; 
 import './styles.css';
+import PropTypes from 'prop-types';
+import { FolderWrapperHeader, ExpandedFolder, NewFolderCard } from './PageComponents';
 
-
-const FolderWrapperHeader = () => (
-  <div className="images-wrapper-header">
-    <h1>Folders</h1>
-    <div className="images-wrapper-header-nav">
-      <div className="images-wrapper-header-icons">
-        <div>
-          <TrashIcon />
-        </div>
-      </div>
-      <div className="images-wrapper-header-btns">
-        <span>Name</span>
-        <span className="active">Added</span>
-      </div>
-    </div>
-  </div>
-);
-
-const ExpandedFolder = ({ toggleExpansion, images }) => {
-  return images ?
-  <div className="expanded-folder-wrapper">
-    <div id="close-icon" onClick={toggleExpansion}><CloseIcon /></div>
-    <div className="expanded-folder-images">
-      {images.map(x => <img src={x.url} alt={x.name} />)}
-    </div>
-  </div> : 
-  null
-};
-
-const NewFolderCard = ({ addFolder }) => (
-  <div className="folder-card" onClick={() => addFolder()}>
-    <div className="folder-card-images">
-      <div className="empty-folder">
-        <AddIconNoCircle />
-      </div>
-    </div>
-  </div>
-);
-
-class FolderCard extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hovering: false,
-      hoveringSpan: false,
-      editing: false,
-      name: ''
-    }
-
-    this.handleChange = this.handleChange.bind(this);
-    this.toggleHoverSpan = this.toggleHoverSpan.bind(this);
-    this.handleHover = this.handleHover.bind(this);
-    this.toggleEditing = this.toggleEditing.bind(this);
-    this.changeName = this.changeName.bind(this);
-  }
-
-  handleHover(bool) {
-    this.setState({ hovering: bool });
-  }
-
-  handleChange(e) {
-    this.setState({ name: e.target.value });
-  }
-
-  toggleHoverSpan(bool) {
-    this.setState({ hoveringSpan: bool });
-  }
-
-  toggleEditing(e) {
-    e.stopPropagation()
-    this.setState({ editing: true });
-  }
-
-  changeName(e) {
-    e.preventDefault();
-    database.ref('/folders').orderByChild('id').equalTo(this.props.folder.id).on('value', snapshot => {
-      if (snapshot.val()) {
-        const child = Object.keys(snapshot.val()) 
-        database.ref('/folders').child('/'+child).update({ name: this.state.name });
-      }
-    })
-    this.setState({ 
-      editing: false,
-      hoveringSpan: false,
-    });
-  }
-
-  render() {
-    const { hovering } = this.state;
-    const { seeFolder, folder, deleteFolder } = this.props;
-    const active = folder.images !== undefined;
-    return (
-      <div>
-        <div 
-          className="folder-card" 
-          onMouseLeave={() => this.handleHover(false)} 
-          onMouseEnter={() => this.handleHover(true)}>
-          { hovering && 
-            <div className="folder-card-over">
-              <div onClick={() => seeFolder(folder.images)} className={`folder-card-over-btn active-${active}`}>See Folder</div>
-              <div onClick={() => deleteFolder(folder)} className="folder-card-over-btn delete">Delete</div>
-            </div>
-          }
-          <div className="folder-card-images">
-            { active ? folder.images.map(x => 
-            <img className="folder-card-img" src={x.url} alt={x.name} />) : <div /> 
-            }
-          </div>
-        </div>
-        { this.state.editing ? 
-        <div className="folder-input-wrapper">
-          <form onSubmit={e => this.changeName(e)}>
-            <input 
-              onClick={e => e.stopPropagation()} 
-              id="img-name-input" 
-              type="text" 
-              onChange={e => this.handleChange(e)} 
-              value={this.state.name} 
-            />
-          </form>
-        </div> :
-        <div 
-          className="folder-span" 
-          onMouseEnter={() => this.toggleHoverSpan(true)} 
-          onMouseLeave={() => this.toggleHoverSpan(false)} 
-        >
-          <span onClick={ e => this.toggleEditing(e) } className="folder-name">{folder.name}</span> 
-          {this.state.hoveringSpan && <div id="folder-icon"><ChangeIcon /></div>}
-        </div> }
-      </div>
-    )
-  }
-};
-
-class Folders extends Component {
+export default class Folders extends Component {
   constructor(props) {
     super(props);
     this.state = {
       expanded: false,
+      images: [],
     }
 
     this.seeFolder = this.seeFolder.bind(this);
@@ -193,7 +61,6 @@ class Folders extends Component {
             seeFolder={this.seeFolder} 
             i={i} 
             folder={folder} 
-            addImages={this.addImages} 
           />
         )}
         <NewFolderCard addFolder={this.addFolder} />
@@ -203,10 +70,10 @@ class Folders extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    folders: state.folders
-  }
-}
-
-export default connect(mapStateToProps, {addFolder, getFolders})(Folders)
+Folders.propTypes = {
+  folders: PropTypes.objectOf(PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    images: PropTypes.array,
+    name: PropTypes.string,
+  })).isRequired,
+};
