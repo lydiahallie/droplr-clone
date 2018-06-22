@@ -18,15 +18,3 @@ export const addFolder = folder => {
   }
 }
 
-export const addFileToFolder = payload => {
-  console.log('payloadddd', payload)
-  // database.ref('/folders').child(`folder-${folder.id}`).set({
-  //   name: payload.name,
-  //   images: payload.images,
-  // })
-  return {
-    type: null,
-    payload: null,
-  }
-}
-

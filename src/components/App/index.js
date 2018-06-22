@@ -7,19 +7,12 @@ import { Sidebar } from '../Sidebar';
 import { Images } from '../Images';
 
 class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      currentUser: null,
-    }
-
+  constructor(props) {
+    super(props);
+ 
     this.handleFileSelected = this.handleFileSelected.bind(this);
-    this.picturesRef = database.ref('/pictures');
-  }
 
-  handleFileSelected(event) {
-    const file = event.target.files[0];
-    this.props.addImage(file);
+    this.picturesRef = database.ref('/pictures');
   }
 
   componentDidMount() {
@@ -30,30 +23,32 @@ class App extends Component {
             database.ref('/users').child(`${currentUser.uid}`).set({id: currentUser.uid})
           }
         });
-        this.setState({ currentUser });
-      } else {
-        this.setState({ currentUser: null });
       }
     });
   }
 
+  handleFileSelected(event) {
+    const file = event.target.files[0];
+    this.props.addImage(file);
+  }
+
   render() {
     return (
-      <div className='app'>
-        <Navbar currentUser={ this.state.currentUser } />
-        <div style={{display: 'flex'}}>
+      <div className="app">
+        <Navbar currentUser={this.props.user} />
+        <div style={{ display: 'flex' }}>
           <Sidebar />
-          { this.props.children }
+          {this.props.children}
         </div>
       </div>
     );
   }
 }
 
-
 const mapStateToProps = state => {
   return {
-    pictures: state.images
+    pictures: state.images,
+    user: state.user,
   }
 }
 

@@ -6,18 +6,18 @@ import { AddIcon, TrashIcon, FoldersIcon, ChangeIcon, HeartIcon } from '../../as
 import shortid from 'short-id';
 import _ from 'lodash';
 import { getImages, addImage } from '../../actions/addImage';
-import { getFolders, addFileToFolder } from '../../actions/folders';
+import { getFolders } from '../../actions/folders';
 import App from '../App';
 import { database } from '../../firebase';
 import styled, { keyframes } from 'styled-components';
 
-const FolderMenu = ({folders, addItemsToFolder}) => {
+const FolderMenu = ({ folders, addItemsToFolder }) => {
   let arr = [];
   for (let item in folders) arr.push(folders[item])
   return (
-    <div className='folder-menu'>
+    <div className="folder-menu">
       {folders && arr.map((folder, i) => (
-        <div className='folder-btn' onClick={ () => addItemsToFolder(folder) } >
+        <div className="folder-btn" onClick={() => addItemsToFolder(folder)} >
           {folder.name}
         </div> 
       ))} 
@@ -46,25 +46,25 @@ class ImagesWrapperHeader extends Component {
   }
 
   render() {
-    const {expanded, active} = this.state;
-    const {selected, removeImages} = this.props;
+    const { expanded, active } = this.state;
+    const { selected, removeImages } = this.props;
     return (
-      <div className='images-wrapper-header'>
+      <div className="images-wrapper-header">
         <h1>Overview</h1>
-        <div className='images-wrapper-header-nav'>
-          <div className='images-wrapper-header-icons'>
-            <div onClick={ () => removeImages() }>
+        <div className="images-wrapper-header-nav">
+          <div className="images-wrapper-header-icons">
+            <div onClick={() => removeImages()}>
               <TrashIcon />
             </div>
-            <div onClick={ () => this.toggleMenu() }>
+            <div onClick={() => this.toggleMenu()}>
               <FoldersIcon />
             </div>
-            { expanded && <FolderMenu addItemsToFolder={ this.addItemsToFolder } folders={this.props.folders} />}
-            <span style={{fontWeight: '600'}}>{selected.length} selected</span>
+            { expanded && <FolderMenu addItemsToFolder={this.addItemsToFolder} folders={this.props.folders} />}
+            <span style={{ fontWeight: '600' }}>{selected.length} selected</span>
           </div>
-          <div className='images-wrapper-header-btns'>
+          <div className="images-wrapper-header-btns">
             {['Name', 'Size', 'Uploaded'].map((btn, i) => (
-               <span onClick={ () => this.changeBtn(i) } className={`active-${active === i}`}>{btn}</span>
+              <span onClick={() => this.changeBtn(i)} className={`active-${active === i}`}>{btn}</span>
             ))}
           </div>
         </div>
@@ -104,7 +104,10 @@ class ImageCard extends Component {
 
   changeName(e) {
     e.preventDefault();
-    database.ref('/pictures').orderByChild('shortid').equalTo(this.props.img.shortid).on('value', snapshot => {
+    database.ref('/pictures')
+            .orderByChild('shortid')
+            .equalTo(this.props.img.shortid)
+            .on('value', snapshot => {
       if (snapshot.val()) {
         const child = Object.keys(snapshot.val()) 
         database.ref('/pictures').child('/'+child).update({name: this.state.name});
@@ -117,22 +120,32 @@ class ImageCard extends Component {
   }
 
   render() {
-    const {img, clickHandler, index, selected, removeImages} = this.props;
+    const { img, clickHandler, index, selected, removeImages } = this.props;
     const { editing, hovering } = this.state;
     return (
       <div className={`image-card selected-${selected.includes(img)}`} onClick={() => clickHandler(img)}>
-        <div className='image-photo' style={{background: `url(${img.url})`}} />
+        <div className="image-photo" style={{background: `url(${img.url})`}} />
         { editing ? 
         <div>
-          <form onSubmit={ e => this.changeName(e) }>
-            <input onClick={ e => e.stopPropagation() } id="img-name-input" type='text' onChange={ e => this.handleChange(e) } value={ this.state.name } />
+          <form onSubmit={e => this.changeName(e)}>
+            <input 
+              onClick={e => e.stopPropagation()} 
+              id="img-name-input" 
+              type="text" 
+              onChange={e => this.handleChange(e)} 
+              value={this.state.name} 
+            />
           </form>
         </div> :
-        <div className='name-span' onMouseEnter={() => this.toggleHover(true)} onMouseLeave={() => this.toggleHover(false)} >
-          <span onClick={ e => this.toggleEditing(e) } className='image-name'>{img.name}</span> 
-          { hovering && <div><ChangeIcon /></div> }
+        <div 
+          className="name-span" 
+          onMouseEnter={() => this.toggleHover(true)} 
+          onMouseLeave={() => this.toggleHover(false)} 
+        >
+          <span onClick={ e => this.toggleEditing(e) } className="image-name">{img.name}</span> 
+          {hovering && <div><ChangeIcon /></div>}
         </div> }
-        <span className='image-date'>{moment(img.timeCreated).fromNow()}</span>
+        <span className="image-date">{moment(img.timeCreated).fromNow()}</span>
       </div>
     );
   }
@@ -151,6 +164,14 @@ class ImagesWrapper extends Component {
     this.removeImages = this.removeImages.bind(this);
   }
 
+  componentDidMount() {
+    if (this.props.pictures) {
+      setTimeout(() => this.setState({ loaded: true }), 1500);
+    } 
+    database.ref('/pictures').on('value', snapshot => this.props.getImages(snapshot.val()))
+    database.ref('/folders').on('value', snapshot => this.props.getFolders(snapshot.val()))
+  }
+
   clickHandler(key) {
     if (this.state.selected.includes(key)) {
       const deleteIndex = this.state.selected.indexOf(key);
@@ -161,24 +182,6 @@ class ImagesWrapper extends Component {
     }
   }
 
-  componentDidMount() {
-    if (this.props.pictures) {
-      setTimeout(() => this.setState({ loaded: true }), 1500);
-    } 
-    database.ref('/pictures').on('value', snapshot => this.props.getImages(snapshot.val()))
-    database.ref('/folders').on('value', snapshot => this.props.getFolders(snapshot.val()))
-  }
-
-  toggleSort = () => {
-    console.log('gettin invoked')
-    this.setState(({sortByName}) => ({sortByName: !sortByName}));
-  }
-
-  compare(a,b) {
-    return (a.name < b.name) ? -1 :
-    (a.name > b.name) ? 1 : 0
-  }
-
   removeImages() {
     this.state.selected.map(img => {
       if (img.shortid) database.ref('/pictures').orderByChild('shortid').equalTo(img.shortid).on('value', snapshot => {
@@ -187,12 +190,24 @@ class ImagesWrapper extends Component {
           database.ref('/pictures').child('/'+child).remove()
         }
       })
-    })
-    this.state.selected.map(x => {
-      const deleteIndex = this.state.selected.indexOf(x);
+      const deleteIndex = this.state.selected.indexOf(img);
       this.state.selected.splice(deleteIndex, 1);
-      this.setState({ selected: this.state.selected })
+      this.setState({ selected: this.state.selected });
     })
+    // this.state.selected.map(img => {
+    //   const deleteIndex = this.state.selected.indexOf(x);
+    //   this.state.selected.splice(deleteIndex, 1);
+    //   this.setState({ selected: this.state.selected })
+    // })
+  }
+
+  toggleSort = () => {
+    this.setState(({ sortByName }) => ({ sortByName: !sortByName }));
+  }
+
+  compare(a,b) {
+    return (a.name < b.name) ? -1 :
+    (a.name > b.name) ? 1 : 0
   }
 
   render() {
@@ -200,24 +215,24 @@ class ImagesWrapper extends Component {
     const {pictures} = this.props;
     let pictureArray = pictures && Object.values(pictures);
     if (sortByName) pictureArray = pictureArray.sort(this.compare);
-    console.log('pic array now', pictureArray)
     return this.props.pictures && (
       <div>
         <ImagesWrapperHeader 
-          folders={ this.props.folders } 
-          addFileToFolder={ this.props.addFileToFolder }
-          selected={ selected } 
-          toggleSort={ this.toggleSort }
-          removeImages={ this.removeImages }/>
-        <div className='images-wrapper'>
+          folders={this.props.folders} 
+          selected={selected} 
+          toggleSort={this.toggleSort}
+          removeImages={this.removeImages}
+        />
+        <div className="images-wrapper">
         { loaded ? pictureArray.map((x, i) =>
           <ImageCard 
             removeImages={this.removeImages} 
-            selected={ selected } 
-            key={ shortid.generate() } 
+            selected={selected} 
+            key={shortid.generate()} 
             index={i} 
-            clickHandler={ this.clickHandler } 
-            img={x} />) :
+            clickHandler={this.clickHandler} 
+            img={x} 
+          />) :
           <div className="container">
             <div className="loader"></div>
           </div> }
@@ -234,4 +249,4 @@ const mapStateToProps = state => {
   }
 }
 
-export const Images = connect(mapStateToProps, {addImage, getImages, getFolders, addFileToFolder})(ImagesWrapper)
+export const Images = connect(mapStateToProps, {addImage, getImages, getFolders})(ImagesWrapper)
